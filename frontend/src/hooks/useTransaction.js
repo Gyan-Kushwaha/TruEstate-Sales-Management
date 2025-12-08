@@ -32,7 +32,7 @@ const useTransactions = () => {
                 endDate: filters.endDate
             };
 
-            const response = await axios.get('http://localhost:5000/api/transactions', { params });
+            const response = await axios.get('https://truestate-sales-management-backend.onrender.com/api/transactions', { params });
             setData(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {
