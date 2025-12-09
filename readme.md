@@ -14,7 +14,7 @@ TruEstate is a MERN stack project I built to manage and analyze retail sales dat
 
 # 3. Search Feature
 Search works through MongoDB using regex. The API figures out what the user is typing:
-- **Text** → looks up by Customer Name (case-insensitive)
+- **Text** → looks up by Customer Name 
 - **Numbers** → checks the Phone Number field
 Both are combined in an $or query so results stay fast and accurate.
 

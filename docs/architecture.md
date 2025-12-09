@@ -1,48 +1,77 @@
 # Architecture Document
 
-## 1. Backend Architecture
-Built on **Node.js** and **Express** following the **MVC pattern**.
-- **Design Decision:** The Mongoose schema uses exact key matching (e.g., `'Customer Name'` with spaces) to align directly with the provided dataset, eliminating the need for CSV pre-processing.
-- **Controller:** Acts as the central logic handler, dynamically constructing MongoDB queries based on active filters and search terms.
+## 1. Backend
 
-## 2. Frontend Architecture
-A **Single Page Application** using **React (Vite)** and **Tailwind CSS**.
-- **State Management:** I avoided external libraries like Redux in favor of a **Custom Hook (`useTransactions`)**. This hook encapsulates all API fetching, debouncing, and pagination logic, keeping the UI components "dumb" and clean.
-- **Styling:** Utility-first approach using Tailwind for a lightweight and responsive UI.
+The backend is built with Node.js and Express and follows a simple MVC structure.
+One important decision: instead of cleaning or renaming fields from the dataset, the database schema uses the exact same keys (even ones with spaces like "Customer Name"). This saves time and avoids any preprocessing step.
 
-## 3. Data Flow
-1.  **Trigger:** User updates search/filter.
-2.  **State:** Frontend hook updates state (debounced) and fires `useEffect`.
-3.  **Request:** Axios sends GET request with params to `/api/transactions`.
-4.  **Processing:** Backend Controller builds the query object (using `$regex`, `$in`, `$gte`).
-5.  **Response:** MongoDB returns filtered data + pagination metadata.
-6.  **Render:** Frontend receives JSON and updates the Table view.
+The controller is where most of the logic lives. It looks at whatever filters or search values are active and then builds the right MongoDB query on the fly.
+
+
+## 2. Frontend
+
+The frontend is a single-page app created with React (using Vite) and styled with Tailwind CSS.
+For state management, I skipped Redux — it felt unnecessary here. Instead, everything related to fetching data, debouncing search input, pagination, etc., is handled inside a custom hook called useTransactions. Components only worry about displaying UI, not business logic.
+
+Tailwind keeps the styling quick and consistent without a lot of custom CSS.
+
+## 3. How Data Moves Through the App
+
+1. The user types something or changes a filter.
+2. The custom hook updates its state and triggers a debounced request.
+3. A GET request is sent to /api/transactions with all active parameters.
+4. The backend builds a MongoDB query using those filters and search terms.
+5. The database returns the matching records plus pagination details.
+6. The table on the frontend updates with the latest results.
 
 ## 4. Folder Structure
 The project uses a monorepo structure:
+<!-- for this i took help from internet how to write folder structure like this then i write and some of the folder i created as you mention in assignment pdf for this even it is not used-->
 ```text
 root/
 ├── backend/
-│   ├── controllers/   
-│   ├── models/        
-│   ├── routes/        
-│   └── index.js       
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── index.js
+│   ├── .env
+│   ├── package.json
+│   └── package-lock.json
+│
 ├── frontend/
-│   ├── components/    
-│   ├── hooks/         
-│   └── App.jsx        
+│   ├── node_modules/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── utils/
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── package.json
+│   └── package-lock.json
+│
 └── docs/
-    └── architecture.
+|    └── architecture.md
+|       
+└── readme.md/
 ```   
 
 ## 5. Module Responsibilities
 
-1. Backend Modules
-- **transactionController.js**: The most complex file. It checks which query params exist and constructs the MongoDB query. It also handles the "text vs number" logic for the Search bar.
-- **Transaction.js**: Defines the data model. It also includes a text index on "Customer Name" to make search faster.
-- **transactionRoutes.js**: A simple router that maps the URL /transactions to the controller.
+1. Backend
 
-2. Frontend Modules
-- **useTransactions.js**: Handles side effects (API calls) and state. It ensures the UI doesn't freeze by using useEffect and debouncing.
-- **FilterPanel.jsx**: Handles the UI for checkboxes and date inputs. It relies on the parent to pass down the state setter functions.
-- **TransactionTable.jsx**: A "dumb" component. It simply takes data as a prop and displays it. It handles the edge case of empty data.
+- **transactionController.js**: Builds queries depending on which filters are being used, and handles the difference between text search and number search.
+- **Transaction.js**: Defines the schema and includes a text index to speed up searching by customer name.
+- **transactionRoutes.js**: Maps incoming requests to the controller functions.
+
+2. Frontend
+
+- **useTransactions.js**: Handles all side effects like API calls, debouncing, pagination, and syncing filters/search with the backend.
+- **FilterPanel.jsx**: Displays checkboxes, date inputs, etc. It doesn’t manage heavy logic — it just updates state coming from the hook.
+- **TransactionTable.jsx**: Receives data and renders it. Also handles the case where there’s nothing to show.
