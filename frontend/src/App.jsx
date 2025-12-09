@@ -67,7 +67,7 @@ function App() {
           <button 
             disabled={page === 1}
             onClick={() => setPage(p => p - 1)}
-            className="px-4 py-2 border rounded disabled:opacity-50"
+            className="px-4 py-2 border rounded disabled:opacity-50  bg-black text-white hover:cursor-pointer hover:bg-gray-500 "
           >
               Previous
           </button>
@@ -75,7 +75,7 @@ function App() {
           <button 
             disabled={page === meta.totalPages}
             onClick={() => setPage(p => p + 1)}
-            className="px-4 py-2 border rounded disabled:opacity-50"
+            className="px-4 py-2 border rounded disabled:opacity-50  bg-black text-white hover:cursor-pointer hover:bg-gray-500"
           >
               Next
           </button>
