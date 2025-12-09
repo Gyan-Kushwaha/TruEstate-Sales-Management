@@ -10,10 +10,13 @@ const TransactionTable = ({ data, loading }) => {
                 <thead className="bg-gray-100 text-gray-700 uppercase">
                     <tr>
                         <th className="px-6 py-3">Customer</th>
+                        <th className="px-6 py-3">Age</th>
+                        <th className="px-6 py-3">Gender</th>
                         <th className="px-6 py-3">Phone</th>
                         <th className="px-6 py-3">Region</th>
                         <th className="px-6 py-3">Date</th>
                         <th className="px-6 py-3">Product</th>
+                        <th className="px-6 py-3">Payment Method</th>
                         <th className="px-6 py-3">Qty</th>
                         <th className="px-6 py-3">Amount</th>
                     </tr>
@@ -22,12 +25,15 @@ const TransactionTable = ({ data, loading }) => {
                     {data.map((item) => (
                         <tr key={item._id} className="border-b hover:bg-gray-50">
                             <td className="px-6 py-4 font-medium">{item['Customer Name']}</td>
+                            <td className="px-6 py-4">{item['Age']}</td>
+                            <td className="px-6 py-4">{item['Gender']}</td>
                             <td className="px-6 py-4">{item['Phone Number']}</td>
                             <td className="px-6 py-4">{item['Customer Region']}</td>
                             <td className="px-6 py-4">
                                 {item['Date'] ? new Date(item['Date']).toLocaleDateString() : 'N/A'}
                             </td>
                             <td className="px-6 py-4">{item['Product Name']}</td>
+                            <td className="px-6 py-4">{item['Payment Method']}</td>
                             <td className="px-6 py-4">{item['Quantity']}</td>
                             <td className="px-6 py-4">${item['Total Amount']}</td>
                         </tr>
