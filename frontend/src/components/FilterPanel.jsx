@@ -26,6 +26,18 @@ const FilterPanel = ({ filters, setFilters, meta }) => {
             </div>
 
             <div>
+                <h3 className="font-bold mb-2">Gender</h3>
+                {['Male','Female'].map(g => (
+                    <label key={g} className="block text-sm">
+                        <input type="checkbox" className="mr-2"
+                            checked={filters.gender?.includes(g)}
+                            onChange={() => handleCheckbox('gender', g)}
+                        /> {g}
+                    </label>
+                ))}
+            </div>
+
+            <div>
                 <h3 className="font-bold mb-2">Category</h3>
                 {meta.categories?.map(c => (
                     <label key={c} className="block text-sm">

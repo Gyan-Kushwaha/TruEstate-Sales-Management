@@ -10,6 +10,7 @@ const useTransactions = () => {
     const [filters, setFilters] = useState({
         region: [],
         category: [],
+        gender:[],
         paymentMethod: [],
         startDate: '',
         endDate: ''
@@ -27,6 +28,7 @@ const useTransactions = () => {
                 sortOrder: sort.sortOrder,
                 region: filters.region.join(','),
                 category: filters.category.join(','),
+                gender: filters.gender.join(','),
                 paymentMethod: filters.paymentMethod.join(','),
                 startDate: filters.startDate,
                 endDate: filters.endDate

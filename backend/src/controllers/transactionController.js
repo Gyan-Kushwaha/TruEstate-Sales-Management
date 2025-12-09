@@ -66,7 +66,9 @@ exports.getTransactions = async (req, res) => {
         
         const regions = await Transaction.distinct('Customer Region');
         const categories = await Transaction.distinct('Product Category');
-
+        const genders = await Transaction.distinct('Gender');
+        
+        
         res.json({
             data: transactions,
             meta: {
@@ -74,7 +76,8 @@ exports.getTransactions = async (req, res) => {
                 page: parseInt(page),
                 totalPages: Math.ceil(total / limit),
                 regions,
-                categories
+                categories,
+                genders
             }
         });
 
